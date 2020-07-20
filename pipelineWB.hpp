@@ -1,7 +1,7 @@
 #ifndef PIPELINEWB_H_INCLUDED
 #define PIPELINEWB_H_INCLUDED
 
-#include "theriscv.h"
+#include "theriscv.hpp"
 
 using namespace std;
 
