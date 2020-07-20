@@ -307,12 +307,13 @@ void theriscv::InputConfirm(){
 //运行
 void theriscv::run(){
     while(!completed){
-        void WB();
-        void MEM();
-        void EX();
-        void ID();
-        void IF();
+        WB();
+        MEM();
+        EX();
+        ID();
+        IF();
     }
+    cout << 255;
 }
 
 #endif // THERISCV_H_INCLUDED
