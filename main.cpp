@@ -11,13 +11,13 @@ using namespace std;
 
 int main()
 {
-    //构造一个RISCV
+    //鏋勯�犱竴涓猂ISCV
     theriscv RISCV;
 
-    //获取输入
+    //鑾峰彇杈撳叆
     RISCV.Input();
 
-    //运行
+    //杩愯
     RISCV.run();
 
     return 0;
