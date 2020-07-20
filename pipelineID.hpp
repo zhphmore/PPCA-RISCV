@@ -1,25 +1,25 @@
 #ifndef PIPELINEID_H_INCLUDED
 #define PIPELINEID_H_INCLUDED
 
-#include "theriscv.h"
+#include "theriscv.hpp"
 
 using namespace std;
 
 void theriscv::ID(){
 
-    //ÅĞ¶ÏÊÇ·ñ½áÊø
+    //åˆ¤æ–­æ˜¯å¦ç»“æŸ
     if(idex.END)
         return;
 
     ClearIDEX();
 
-    //ÅĞ¶ÏÊÇ·ñÊÇÆøÅİ
+    //åˆ¤æ–­æ˜¯å¦æ˜¯æ°”æ³¡
     if(ifid.ins==BUBBLE){
         idex.ins=BUBBLE;
         return;
     }
 
-    //½âÂëÖ¸ÁîÀàĞÍ
+    //è§£ç æŒ‡ä»¤ç±»å‹
     unsigned int opcode=ToUInt(ifid.IR,25,31);
     unsigned int func;
     unsigned int head;
@@ -27,12 +27,12 @@ void theriscv::ID(){
 
     switch(opcode){
 
-        //¿ÕÖ¸Áî
+        //ç©ºæŒ‡ä»¤
         case 0:
             idex.ins=NOP;
             break;
 
-        //ÕûÊı´´½¨Ö¸Áî
+        //æ•´æ•°åˆ›å»ºæŒ‡ä»¤
         case 55://"0110111"
             idex.ins=LUI;
             idex.rd=ToUInt(ifid.IR,20,24);
@@ -45,7 +45,7 @@ void theriscv::ID(){
             idex.imm=ToInt(ifid.IR,0,19);
             break;
 
-        //·ÇÌõ¼şÌøÔ¾Ö¸Áî
+        //éæ¡ä»¶è·³è·ƒæŒ‡ä»¤
         case 111://"1101111"
             idex.ins=JAL;
             idex.rd=ToUInt(ifid.IR,20,24);
@@ -73,7 +73,7 @@ void theriscv::ID(){
             }
             break;
 
-        //Ìõ¼şÌøÔ¾Ö¸Áî
+        //æ¡ä»¶è·³è·ƒæŒ‡ä»¤
         case 99://"1100011"
             func=ToUInt(ifid.IR,17,19);
             idex.rs1=ToUInt(ifid.IR,12,16);
@@ -117,7 +117,7 @@ void theriscv::ID(){
 
             break;
 
-        //LoadÖ¸Áî
+        //LoadæŒ‡ä»¤
         case 3://"0000011"
             func=ToUInt(ifid.IR,17,19);
             idex.rs1=ToUInt(ifid.IR,12,16);
@@ -144,7 +144,7 @@ void theriscv::ID(){
             }
             break;
 
-        //StoreÖ¸Áî
+        //StoreæŒ‡ä»¤
         case 35://"0100011"
             func=ToUInt(ifid.IR,17,19);
             idex.rs1=ToUInt(ifid.IR,12,16);
@@ -169,7 +169,7 @@ void theriscv::ID(){
             }
             break;
 
-        //R-IÖ¸Áî
+        //R-IæŒ‡ä»¤
         case 17://"0010011"
             func=ToUInt(ifid.IR,17,19);
             head=ToUInt(ifid.IR,0,6);
@@ -179,7 +179,7 @@ void theriscv::ID(){
                 case 0://"000"
                     idex.ins=ADDI;
                     idex.imm=ToInt(ifid.IR,0,11);
-                    //ÉèÖÃµÄ½áÊøÖ¸Áî
+                    //è®¾ç½®çš„ç»“æŸæŒ‡ä»¤
                     if((idex.imm==255) && (idex.rs1==0) && (idex.rd==10)){
                         idex.END=true;
                         ifid.END=true;
@@ -234,7 +234,7 @@ void theriscv::ID(){
             }
             break;
 
-        //R-RÖ¸Áî
+        //R-RæŒ‡ä»¤
         case 54://"0110011"
             func=ToUInt(ifid.IR,17,19);
             head=ToUInt(ifid.IR,0,6);
@@ -303,16 +303,16 @@ void theriscv::ID(){
             idex.ins=WRONG;
     }
 
-    //ÕûÀíIDEX¼Ä´æÆ÷
+    //æ•´ç†IDEXå¯„å­˜å™¨
     idex.npc=ifid.npc;
-    //idex.insÒÑ¼ÆËãºÃ
-    //idex.rs1ÒÑ¼ÆËãºÃ
-    //idex.rs2ÒÑ¼ÆËãºÃ
-    //idex.rdÒÑ¼ÆËãºÃ
-    //idex.immÒÑ¼ÆËãºÃ
-    //idex.immuÒÑ¼ÆËãºÃ
-    //idex.predÒÑ¼ÆËãºÃ
-    //idex.ENDÒÑ¼ÆËãºÃ
+    //idex.inså·²è®¡ç®—å¥½
+    //idex.rs1å·²è®¡ç®—å¥½
+    //idex.rs2å·²è®¡ç®—å¥½
+    //idex.rdå·²è®¡ç®—å¥½
+    //idex.immå·²è®¡ç®—å¥½
+    //idex.immuå·²è®¡ç®—å¥½
+    //idex.predå·²è®¡ç®—å¥½
+    //idex.ENDå·²è®¡ç®—å¥½
 }
 
 #endif // PIPELINEID_H_INCLUDED
