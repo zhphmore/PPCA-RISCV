@@ -7,51 +7,51 @@ using namespace std;
 
 void theriscv::WB(){
 
-    //ÅĞ¶ÏÊÇ·ñÊÇÆøÅİ
+    //åˆ¤æ–­æ˜¯å¦æ˜¯æ°”æ³¡
     if(memwb.ins==BUBBLE)
         return;
 
-    //±£Ö¤x[0]²»±»ĞŞ¸Ä
+    //ä¿è¯x[0]ä¸è¢«ä¿®æ”¹
     if(memwb.rd==0)
         return;
 
     switch(memwb.ins){
 
-        //¿ÕÖ¸Áî
+        //ç©ºæŒ‡ä»¤
         case NOP:
             break;
 
-        //ÕûÊı´´½¨Ö¸Áî
+        //æ•´æ•°åˆ›å»ºæŒ‡ä»¤
         case LUI:case AUIPC:
             x[memwb.rd]=memwb.res;
             break;
 
-        //·ÇÌõ¼şÌøÔ¾Ö¸Áî
+        //éæ¡ä»¶è·³è·ƒæŒ‡ä»¤
         case JAL:case JALR:
             x[memwb.rd]=memwb.res;
             break;
 
-        //Ìõ¼şÌøÔ¾Ö¸Áî
+        //æ¡ä»¶è·³è·ƒæŒ‡ä»¤
         case BEQ:case BNE:case BLT:case BGE:case BLTU:case BGEU:
             break;
 
-        //LoadÖ¸Áî
+        //LoadæŒ‡ä»¤
         case LB:case LH:case LW:case LBU:case LHU:
             x[memwb.rd]=memwb.res;
             break;
 
-        //StoreÖ¸Áî
+        //StoreæŒ‡ä»¤
         case SB:case SH:case SW:
             break;
 
-        //R-IÖ¸Áî
+        //R-IæŒ‡ä»¤
         case ADDI:case SLTI:case SLTIU:
         case XORI:case ORI:case ANDI:
         case SLLI:case SRLI:case SRAI:
             x[memwb.rd]=memwb.res;
             break;
 
-        //R-RÖ¸Áî
+        //R-RæŒ‡ä»¤
         case ADD:case SUB:case SLL:case SLT:case SLTU:
         case XOR:case SRL:case SRA:case OR:case AND:
             x[memwb.rd]=memwb.res;
@@ -64,8 +64,11 @@ void theriscv::WB(){
             break;
     }
 
-    if(memwb.END)
+    if(memwb.END){
         completed=true;
+        unsigned int result=(((unsigned int)x[memwb.rd]) & 255u);
+        cout << result;
+    }
 }
 
 #endif // PIPELINEWB_H_INCLUDED
