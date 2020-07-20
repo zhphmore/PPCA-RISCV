@@ -1,13 +1,13 @@
 #ifndef PIPELINEIF_H_INCLUDED
 #define PIPELINEIF_H_INCLUDED
 
-#include "theriscv.h"
+#include "theriscv.hpp"
 
 using namespace std;
 
 void theriscv::IF(){
 
-    //ÅĞ¶ÏÊÇ·ñ½áÊø
+    //åˆ¤æ–­æ˜¯å¦ç»“æŸ
     if(ifid.END)
         return;
 
@@ -24,11 +24,11 @@ void theriscv::IF(){
 
     pc=ifid.npc=pc+4;
 
-    //ÕûÀíIFID¼Ä´æÆ÷
-    //ifid.IRÒÑ¼ÆËãºÃ
-    //ifid.npcÒÑ¼ÆËãºÃ
-    //ifid.insÒÑ¼ÆËãºÃ
-    //ifid.ENDÒÑ¼ÆËãºÃ
+    //æ•´ç†IFIDå¯„å­˜å™¨
+    //ifid.IRå·²è®¡ç®—å¥½
+    //ifid.npcå·²è®¡ç®—å¥½
+    //ifid.inså·²è®¡ç®—å¥½
+    //ifid.ENDå·²è®¡ç®—å¥½
 }
 
 #endif // PIPELINEIF_H_INCLUDED
