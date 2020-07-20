@@ -1,7 +1,7 @@
 #ifndef PIPELINEMEM_H_INCLUDED
 #define PIPELINEMEM_H_INCLUDED
 
-#include "theriscv.h"
+#include "theriscv.hpp"
 
 using namespace std;
 
