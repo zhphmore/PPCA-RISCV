@@ -133,7 +133,7 @@ theriscv::theriscv(){
 
 //归零IFID寄存器
 void theriscv::ClearIFID(){
-    memset(ifid.IR,0,32);
+    memset(ifid.IR,0,sizeof(char)*32);
     ifid.npc=0;
     ifid.ins=NOP;
     ifid.END=false;
@@ -173,7 +173,7 @@ void theriscv::ClearMEMWB(){
 //归零寄存器
 void theriscv::ClearReg(){
     //归零x0~x31
-    memset(x,0,32);
+    memset(x,0,sizeof(int)*32);
     //归零pc
     pc=0;
     //归零流水寄存器
@@ -185,7 +185,7 @@ void theriscv::ClearReg(){
 
 //归零内存
 void theriscv::ClearMem(){
-    memset(mem,0,MAX_MEM);
+    memset(mem,0,sizeof(unsigned char)*MAX_MEM);
 }
 
 //预测是否跳转
@@ -198,7 +198,7 @@ bool theriscv::Predict(){
 //归零二位计数器
 void theriscv::ClearCounter(){
     counter.num=0;
-    memset(counter.history,0,10000);
+    memset(counter.history,0,sizeof(char)*10000);
     counter.currentsize=0;
 }
 
@@ -280,8 +280,10 @@ int theriscv::HexToDec(const char* str,const int a,const int b){
 void theriscv::Input(){
     int adtmp;
     char tmpstr[12];
-    memset(tmpstr,0,12);
+    memset(tmpstr,0,sizeof(char)*12);
     while(cin >> tmpstr){
+        if(tmpstr[0]=='#')
+            break;
         if(tmpstr[0]=='@'){
             adtmp=HexToDec(tmpstr,1,8);
             mem[adtmp++]=HexToDec(tmpstr,9,10);
@@ -289,6 +291,7 @@ void theriscv::Input(){
         else{
             mem[adtmp++]=HexToDec(tmpstr,0,1);
         }
+        memset(tmpstr,0,sizeof(char)*12);
     }
 }
 
