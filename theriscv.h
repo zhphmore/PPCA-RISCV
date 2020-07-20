@@ -12,7 +12,7 @@ using namespace std;
 class theriscv{
 private:
 
-    //Ö¸ÁîÀàĞÍ
+    //æŒ‡ä»¤ç±»å‹
     enum OrderType{
         NOP=0,
         LUI=1,AUIPC,
@@ -27,19 +27,19 @@ private:
         WRONG=40
     };
 
-    //x0~x31¼Ä´æÆ÷
+    //x0~x31å¯„å­˜å™¨
     int x[32];
-    //pc¼Ä´æÆ÷
+    //pcå¯„å­˜å™¨
     unsigned int pc;
 
-    //IFID¼Ä´æÆ÷
+    //IFIDå¯„å­˜å™¨
     struct IFID{
         char IR[32];
         unsigned int npc;
         OrderType ins;
         bool END;
     }ifid;
-    //IDEX¼Ä´æÆ÷
+    //IDEXå¯„å­˜å™¨
     struct IDEX{
         unsigned int npc;
         OrderType ins;
@@ -48,51 +48,51 @@ private:
         unsigned int rd;
         int imm;
         unsigned int immu;
-        bool pred;//·ÖÖ§Ô¤²â
-        bool END;//½áÊøÔËĞĞ
+        bool pred;//åˆ†æ”¯é¢„æµ‹
+        bool END;//ç»“æŸè¿è¡Œ
     }idex;
-    //EXMEM¼Ä´æÆ÷
+    //EXMEMå¯„å­˜å™¨
     struct EXMEM{
         unsigned int npc;
         OrderType ins;
         unsigned int rs2;
         unsigned int rd;
         int val;
-        bool END;//½áÊøÔËĞĞ
+        bool END;//ç»“æŸè¿è¡Œ
     }exmem;
-    //MEMWB¼Ä´æÆ÷
+    //MEMWBå¯„å­˜å™¨
     struct MEMWB{
         OrderType ins;
         unsigned int rd;
         int res;
-        bool END;//½áÊøÔËĞĞ
+        bool END;//ç»“æŸè¿è¡Œ
     }memwb;
 
-    //ÄÚ´æ
+    //å†…å­˜
     unsigned char mem[MAX_MEM];
 
-    //·ÖÖ§Ô¤²â¶şÎ»¼ÆÊıÆ÷
+    //åˆ†æ”¯é¢„æµ‹äºŒä½è®¡æ•°å™¨
     struct COUNTER{
         int num;
         char history[10000];
         int currentsize;
     }counter;
 
-    //ÔËĞĞ½áÊø±êÖ¾
+    //è¿è¡Œç»“æŸæ ‡å¿—
     bool completed;
 
-    //°Ñ¶ş½øÖÆ×Ö·û´®×ª»»ÎªÎŞ·ûºÅÊ®½øÖÆÊı×Ö
+    //æŠŠäºŒè¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ— ç¬¦å·åè¿›åˆ¶æ•°å­—
     unsigned int ToUInt(const char* str,const int a,const int b);
-    //°Ñ¶ş½øÖÆ×Ö·û´®×ª»»ÎªÓĞ·ûºÅÊ®½øÖÆÊı×Ö
+    //æŠŠäºŒè¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºæœ‰ç¬¦å·åè¿›åˆ¶æ•°å­—
     int ToInt(const char* str,const int a,const int b);
-    //°ÑÊ®Áù½øÖÆ×Ö·û´®×ª»»ÎªÊ®½øÖÆÊı×Ö
+    //æŠŠåå…­è¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºåè¿›åˆ¶æ•°å­—
     int HexToDec(const char* str,const int a,const int b);
-    //¹éÁãÁ÷Ë®¼Ä´æÆ÷
+    //å½’é›¶æµæ°´å¯„å­˜å™¨
     void ClearIFID();
     void ClearIDEX();
     void ClearEXMEM();
     void ClearMEMWB();
-    //¶şÎ»¼ÆÊıÆ÷²Ù×÷
+    //äºŒä½è®¡æ•°å™¨æ“ä½œ
     bool Predict();
     void CounterAdd();
     void CounterSub();
@@ -101,27 +101,29 @@ private:
 
 public:
 
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     theriscv();
-    //¹éÁãº¯Êı
+    //å½’é›¶å‡½æ•°
     void ClearReg();
     void ClearMem();
     void ClearCounter();
-    //ÊäÈë
+    //è¾“å…¥
     void Input();
     void InputConfirm();
-    //Îå¼¶Á÷Ë®º¯Êı
+    //åˆ†æ”¯é¢„æµ‹å‡†ç¡®ç‡
+    void Precision();
+    //äº”çº§æµæ°´å‡½æ•°
     void IF();
     void ID();
     void EX();
     void MEM();
     void WB();
-    //ÔËĞĞ
+    //è¿è¡Œ
     void run();
 
 };
 
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 theriscv::theriscv(){
     ClearReg();
     ClearMem();
@@ -129,7 +131,7 @@ theriscv::theriscv(){
     completed=false;
 }
 
-//¹éÁãIFID¼Ä´æÆ÷
+//å½’é›¶IFIDå¯„å­˜å™¨
 void theriscv::ClearIFID(){
     memset(ifid.IR,0,32);
     ifid.npc=0;
@@ -137,7 +139,7 @@ void theriscv::ClearIFID(){
     ifid.END=false;
 }
 
-//¹éÁãIDEX¼Ä´æÆ÷
+//å½’é›¶IDEXå¯„å­˜å™¨
 void theriscv::ClearIDEX(){
     idex.npc=0;
     idex.ins=NOP;
@@ -150,7 +152,7 @@ void theriscv::ClearIDEX(){
     idex.END=false;
 }
 
-//¹éÁãEXMEM¼Ä´æÆ÷
+//å½’é›¶EXMEMå¯„å­˜å™¨
 void theriscv::ClearEXMEM(){
     exmem.npc=0;
     exmem.ins=NOP;
@@ -160,7 +162,7 @@ void theriscv::ClearEXMEM(){
     exmem.END=false;
 }
 
-//¹éÁãMEMWB¼Ä´æÆ÷
+//å½’é›¶MEMWBå¯„å­˜å™¨
 void theriscv::ClearMEMWB(){
     memwb.ins=NOP;
     memwb.rd=0;
@@ -168,61 +170,77 @@ void theriscv::ClearMEMWB(){
     memwb.END=false;
 }
 
-//¹éÁã¼Ä´æÆ÷
+//å½’é›¶å¯„å­˜å™¨
 void theriscv::ClearReg(){
-    //¹éÁãx0~x31
+    //å½’é›¶x0~x31
     memset(x,0,32);
-    //¹éÁãpc
+    //å½’é›¶pc
     pc=0;
-    //¹éÁãÁ÷Ë®¼Ä´æÆ÷
+    //å½’é›¶æµæ°´å¯„å­˜å™¨
     ClearIFID();
     ClearIDEX();
     ClearEXMEM();
     ClearMEMWB();
 }
 
-//¹éÁãÄÚ´æ
+//å½’é›¶å†…å­˜
 void theriscv::ClearMem(){
     memset(mem,0,MAX_MEM);
 }
 
-//Ô¤²âÊÇ·ñÌø×ª
+//é¢„æµ‹æ˜¯å¦è·³è½¬
 bool theriscv::Predict(){
     if(counter.num>=3)
         return true;
     return false;
 }
 
-//¹éÁã¶şÎ»¼ÆÊıÆ÷
+//å½’é›¶äºŒä½è®¡æ•°å™¨
 void theriscv::ClearCounter(){
     counter.num=0;
     memset(counter.history,0,10000);
     counter.currentsize=0;
 }
 
-//¶şÎ»¼ÆÊıÆ÷Ôö¼Ó
+//äºŒä½è®¡æ•°å™¨å¢åŠ 
 void theriscv::CounterAdd(){
     if(counter.num!=4)
         counter.num++;
 }
 
-//¶şÎ»¼ÆÊıÆ÷¼õÉÙ
+//äºŒä½è®¡æ•°å™¨å‡å°‘
 void theriscv::CounterSub(){
     if(counter.num!=0)
         counter.num--;
 }
 
-//¼ÇÂ¼¶şÎ»¼ÆÊıÆ÷ÅĞ¶Ï³É¹¦
+//è®°å½•äºŒä½è®¡æ•°å™¨åˆ¤æ–­æˆåŠŸ
 void theriscv::CounterYes(){
     counter.history[counter.currentsize++]=1;
 }
 
-//¼ÇÂ¼¶şÎ»¼ÆÊıÆ÷ÅĞ¶ÏÊ§°Ü
+//è®°å½•äºŒä½è®¡æ•°å™¨åˆ¤æ–­å¤±è´¥
 void theriscv::CounterNo(){
     counter.history[counter.currentsize++]=0;
 }
 
-//°Ñ¶ş½øÖÆ×Ö·û´®×ª»»ÎªÎŞ·ûºÅÊ®½øÖÆÊı×Ö
+//åˆ†æ”¯é¢„æµ‹å‡†ç¡®ç‡
+void theriscv::Precision(){
+    if(!counter.currentsize){
+        cout << "No record!" << endl;
+        return;
+    }
+    double rate;
+    int correct=0;
+    for(int i=0;i<counter.currentsize;i++){
+        if(counter.history[i]==1)
+            correct++;
+    }
+    rate=correct / counter.currentsize;
+    cout << "Precision:" << rate << endl;
+}
+
+//æŠŠäºŒè¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ— ç¬¦å·åè¿›åˆ¶æ•°å­—
 unsigned int theriscv::ToUInt(const char* str,const int a,const int b){
     int dec=0;
     for(int i=a;i<=b;i++){
@@ -231,7 +249,7 @@ unsigned int theriscv::ToUInt(const char* str,const int a,const int b){
     return dec;
 }
 
-//°Ñ¶ş½øÖÆ×Ö·û´®×ª»»ÎªÓĞ·ûºÅÊ®½øÖÆÊı×Ö
+//æŠŠäºŒè¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºæœ‰ç¬¦å·åè¿›åˆ¶æ•°å­—
 int theriscv::ToInt(const char* str,const int a,const int b){
     int dec=0;
     for(int i=a+1;i<=b;i++){
@@ -242,7 +260,7 @@ int theriscv::ToInt(const char* str,const int a,const int b){
     return dec;
 }
 
-//°ÑÊ®Áù½øÖÆ×Ö·û´®×ª»»ÎªÊ®½øÖÆÊı×Ö
+//æŠŠåå…­è¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºåè¿›åˆ¶æ•°å­—
 int theriscv::HexToDec(const char* str,const int a,const int b){
     int dec=0;
     for(int i=a;i<=b;i++){
@@ -258,7 +276,7 @@ int theriscv::HexToDec(const char* str,const int a,const int b){
     return dec;
 }
 
-//ÊäÈë
+//è¾“å…¥
 void theriscv::Input(){
     int adtmp;
     char tmpstr[12];
@@ -274,7 +292,7 @@ void theriscv::Input(){
     }
 }
 
-//¼ì²éÊäÈë
+//æ£€æŸ¥è¾“å…¥
 void theriscv::InputConfirm(){
     for(int i=0;i<MAX_MEM;i++)
         if(mem[i]){
@@ -283,7 +301,7 @@ void theriscv::InputConfirm(){
         }
 }
 
-//ÔËĞĞ
+//è¿è¡Œ
 void theriscv::run(){
     while(!completed){
         void WB();
