@@ -1,25 +1,25 @@
 #ifndef PIPELINEEX_H_INCLUDED
 #define PIPELINEEX_H_INCLUDED
 
-#include "theriscv.h"
+#include "theriscv.hpp"
 
 using namespace std;
 
 void theriscv::EX(){
 
-    //ÅĞ¶ÏÊÇ·ñ½áÊø
+    //åˆ¤æ–­æ˜¯å¦ç»“æŸ
     if(exmem.END)
         return;
 
     ClearEXMEM();
 
-    //ÅĞ¶ÏÊÇ·ñÊÇÆøÅİ
+    //åˆ¤æ–­æ˜¯å¦æ˜¯æ°”æ³¡
     if(idex.ins==BUBBLE){
         exmem.ins=BUBBLE;
         return;
     }
 
-    //ÅĞ¶ÏÊı¾İÃ°ÏÕ
+    //åˆ¤æ–­æ•°æ®å†’é™©
     int xvalrs1,xvalrs2;
     if(idex.rs1==0)
         xvalrs1=0;
@@ -39,11 +39,11 @@ void theriscv::EX(){
 
     switch(idex.ins){
 
-        //¿ÕÖ¸Áî
+        //ç©ºæŒ‡ä»¤
         case NOP:
             break;
 
-        //ÕûÊı´´½¨Ö¸Áî
+        //æ•´æ•°åˆ›å»ºæŒ‡ä»¤
         case LUI:
             exmem.val=idex.imm<<12;
             break;
@@ -51,7 +51,7 @@ void theriscv::EX(){
             exmem.val=idex.npc-4+(idex.imm<<12);
             break;
 
-        //·ÇÌõ¼şÌøÔ¾Ö¸Áî
+        //éæ¡ä»¶è·³è·ƒæŒ‡ä»¤
         case JAL:
             exmem.val=idex.npc;
             exmem.npc=idex.npc-4+idex.imm;
@@ -63,9 +63,9 @@ void theriscv::EX(){
             ifid.ins=BUBBLE;
             break;
 
-        //Ìõ¼şÌøÔ¾Ö¸Áî
+        //æ¡ä»¶è·³è·ƒæŒ‡ä»¤
         case BEQ:
-            if(xvalrs1==xvalrs2){//»áÌø
+            if(xvalrs1==xvalrs2){//ä¼šè·³
                 CounterAdd();
                 if(idex.pred){
                     CounterYes();
@@ -78,7 +78,7 @@ void theriscv::EX(){
                 }
 
             }
-            else{//²»»áÌø
+            else{//ä¸ä¼šè·³
                 CounterSub();
                 if(idex.pred){
                     CounterNo();
@@ -91,7 +91,7 @@ void theriscv::EX(){
 
             break;
         case BNE:
-            if(xvalrs1!=xvalrs2){//»áÌø
+            if(xvalrs1!=xvalrs2){//ä¼šè·³
                 CounterAdd();
                 if(idex.pred){
                     CounterYes();
@@ -104,7 +104,7 @@ void theriscv::EX(){
                 }
 
             }
-            else{//²»»áÌø
+            else{//ä¸ä¼šè·³
                 CounterSub();
                 if(idex.pred){
                     CounterNo();
@@ -117,7 +117,7 @@ void theriscv::EX(){
 
             break;
         case BLT:
-            if(xvalrs1<xvalrs2){//»áÌø
+            if(xvalrs1<xvalrs2){//ä¼šè·³
                 CounterAdd();
                 if(idex.pred){
                     CounterYes();
@@ -130,7 +130,7 @@ void theriscv::EX(){
                 }
 
             }
-            else{//²»»áÌø
+            else{//ä¸ä¼šè·³
                 CounterSub();
                 if(idex.pred){
                     CounterNo();
@@ -143,7 +143,7 @@ void theriscv::EX(){
 
             break;
         case BGE:
-            if(xvalrs1>xvalrs2){//»áÌø
+            if(xvalrs1>xvalrs2){//ä¼šè·³
                 CounterAdd();
                 if(idex.pred){
                     CounterYes();
@@ -156,7 +156,7 @@ void theriscv::EX(){
                 }
 
             }
-            else{//²»»áÌø
+            else{//ä¸ä¼šè·³
                 CounterSub();
                 if(idex.pred){
                     CounterNo();
@@ -169,7 +169,7 @@ void theriscv::EX(){
 
             break;
         case BLTU:
-            if(static_cast<unsigned int>(xvalrs1) < static_cast<unsigned int>(xvalrs2)){//»áÌø
+            if(static_cast<unsigned int>(xvalrs1) < static_cast<unsigned int>(xvalrs2)){//ä¼šè·³
                 CounterAdd();
                 if(idex.pred){
                     CounterYes();
@@ -182,7 +182,7 @@ void theriscv::EX(){
                 }
 
             }
-            else{//²»»áÌø
+            else{//ä¸ä¼šè·³
                 CounterSub();
                 if(idex.pred){
                     CounterNo();
@@ -195,7 +195,7 @@ void theriscv::EX(){
 
             break;
         case BGEU:
-            if(static_cast<unsigned int>(xvalrs1) > static_cast<unsigned int>(xvalrs2)){//»áÌø
+            if(static_cast<unsigned int>(xvalrs1) > static_cast<unsigned int>(xvalrs2)){//ä¼šè·³
                 CounterAdd();
                 if(idex.pred){
                     CounterYes();
@@ -208,7 +208,7 @@ void theriscv::EX(){
                 }
 
             }
-            else{//²»»áÌø
+            else{//ä¸ä¼šè·³
                 CounterSub();
                 if(idex.pred){
                     CounterNo();
@@ -221,7 +221,7 @@ void theriscv::EX(){
 
             break;
 
-        //LoadÖ¸Áî
+        //LoadæŒ‡ä»¤
         case LB:
             exmem.val=xvalrs1+idex.imm;
             break;
@@ -238,7 +238,7 @@ void theriscv::EX(){
             exmem.val=xvalrs1+idex.imm;
             break;
 
-        //StoreÖ¸Áî
+        //StoreæŒ‡ä»¤
         case SB:
             exmem.val=xvalrs1+idex.imm;
             break;
@@ -249,7 +249,7 @@ void theriscv::EX(){
             exmem.val=xvalrs1+idex.imm;
             break;
 
-        //R-IÖ¸Áî
+        //R-IæŒ‡ä»¤
         case ADDI:
             exmem.val=xvalrs1+idex.imm;
             break;
@@ -278,7 +278,7 @@ void theriscv::EX(){
             exmem.val=xvalrs1>>idex.immu;
             break;
 
-        //R-RÖ¸Áî
+        //R-RæŒ‡ä»¤
         case ADD:
             exmem.val=xvalrs1+xvalrs2;
             break;
@@ -317,12 +317,12 @@ void theriscv::EX(){
             exmem.val=0;
     }
 
-    //ÕûÀíEXMEM¼Ä´æÆ÷
-    //exmem.npcÒÑ¼ÆËãºÃ
+    //æ•´ç†EXMEMå¯„å­˜å™¨
+    //exmem.npcå·²è®¡ç®—å¥½
     exmem.ins=idex.ins;
     exmem.rs2=idex.rs2;
     exmem.rd=idex.rd;
-    //exmem.valÒÑ¼ÆËãºÃ
+    //exmem.valå·²è®¡ç®—å¥½
     exmem.END=idex.END;
 }
 
