@@ -286,7 +286,7 @@ void theriscv::Input(){
             break;
         if(tmpstr[0]=='@'){
             adtmp=HexToDec(tmpstr,1,8);
-            mem[adtmp++]=HexToDec(tmpstr,9,10);
+            //mem[adtmp++]=HexToDec(tmpstr,9,10);
         }
         else{
             mem[adtmp++]=HexToDec(tmpstr,0,1);
