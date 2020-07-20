@@ -133,7 +133,8 @@ theriscv::theriscv(){
 
 //归零IFID寄存器
 void theriscv::ClearIFID(){
-    memset(ifid.IR,0,sizeof(char)*32);
+    for(int i=0;i<32;i++)
+        ifid.IR[i]='0';
     ifid.npc=0;
     ifid.ins=NOP;
     ifid.END=false;
