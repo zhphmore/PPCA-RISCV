@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cstring>
-#include "theriscv.h"
-#include "pipelineIF.h"
-#include "pipelineID.h"
-#include "pipelineEX.h"
-#include "pipelineMEM.h"
-#include "pipelineWB.h"
+#include "theriscv.hpp"
+#include "pipelineIF.hpp"
+#include "pipelineID.hpp"
+#include "pipelineEX.hpp"
+#include "pipelineMEM.hpp"
+#include "pipelineWB.hpp"
 
 using namespace std;
 
