@@ -45,10 +45,10 @@ void theriscv::EX(){
 
         //整数创建指令
         case LUI:
-            exmem.val=idex.imm<<12;
+            exmem.val=idex.imm;
             break;
         case AUIPC:
-            exmem.val=idex.npc-4+(idex.imm<<12);
+            exmem.val=idex.npc-4+idex.imm;
             break;
 
         //非条件跳跃指令
