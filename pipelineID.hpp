@@ -169,7 +169,7 @@ void theriscv::ID(){
             break;
 
         //R-I指令
-        case 17://"0010011"
+        case 19://"0010011"
             func=ToUInt(ifid.IR,17,19);
             head=ToUInt(ifid.IR,0,6);
             idex.rs1=ToUInt(ifid.IR,12,16);
@@ -240,7 +240,7 @@ void theriscv::ID(){
             break;
 
         //R-R指令
-        case 54://"0110011"
+        case 51://"0110011"
             func=ToUInt(ifid.IR,17,19);
             head=ToUInt(ifid.IR,0,6);
             idex.rs1=ToUInt(ifid.IR,12,16);
