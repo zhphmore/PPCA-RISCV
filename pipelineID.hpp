@@ -23,7 +23,7 @@ void theriscv::ID(){
     unsigned int opcode=ToUInt(ifid.IR,25,31);
     unsigned int func;
     unsigned int head;
-    char immtmp[21];
+    unsigned int immtmp1,immtmp2,immtmp3,immtmp4;
 
     switch(opcode){
 
@@ -42,7 +42,7 @@ void theriscv::ID(){
         case 23://"0010111"
             idex.ins=AUIPC;
             idex.rd=ToUInt(ifid.IR,20,24);
-            idex.imm=ToInt(ifid.IR,0,19);
+            idex.imm=(ifid.iru>>12) << 12;
             break;
 
         //非条件跳跃指令
