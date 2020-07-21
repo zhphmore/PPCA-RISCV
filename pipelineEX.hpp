@@ -58,7 +58,7 @@ void theriscv::EX(){
             break;
         case JALR:
             exmem.val=idex.npc;
-            exmem.npc=idex.npc-4+((xvalrs1+idex.imm)/2)*2;
+            exmem.npc=(xvalrs1+idex.imm)&(~1);
             pc=exmem.npc;
             ifid.ins=BUBBLE;
             break;
