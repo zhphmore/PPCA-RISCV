@@ -325,7 +325,6 @@ void theriscv::run(){
         ID();
         IF();
     }
-    cout << 255;
 }
 
 #endif // THERISCV_H_INCLUDED
