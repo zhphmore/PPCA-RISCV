@@ -36,7 +36,7 @@ void theriscv::ID(){
         case 55://"0110111"
             idex.ins=LUI;
             idex.rd=ToUInt(ifid.IR,20,24);
-            idex.imm=ToInt(ifid.IR,0,19);
+            idex.imm=(ifid.iru>>12) << 12;
             break;
 
         case 23://"0010111"
@@ -49,14 +49,12 @@ void theriscv::ID(){
         case 111://"1101111"
             idex.ins=JAL;
             idex.rd=ToUInt(ifid.IR,20,24);
-            for(int i=1;i<=10;i++)
-                immtmp[i+11]=ifid.IR[i];
-            immtmp[11]=ifid.IR[11];
-            for(int i=12;i<=19;i++)
-                immtmp[i-11]=ifid.IR[i];
-            immtmp[0]=ifid.IR[0];
-            immtmp[0]='0';
-            idex.imm=ToInt(immtmp,0,20);
+            immtmp1=((ifid.iru>> 12) & 255) << 12;
+            immtmp2=((ifid.iru>> 20) & 1) << 11;
+            immtmp3=((ifid.iru>> 21) & 1023) << 1;
+            immtmp4=((ifid.iru>> 31) & 1) << 20;
+            idex.imm=immtmp1+immtmp2+immtmp3+immtmp4;
+            idex.imm=signextend(idex.imm,20);
             pc=ifid.npc-4+idex.imm;
             break;
 
@@ -66,7 +64,8 @@ void theriscv::ID(){
                 idex.ins=JALR;
                 idex.rs1=ToUInt(ifid.IR,12,16);
                 idex.rd=ToUInt(ifid.IR,20,24);
-                idex.imm=ToUInt(ifid.IR,0,11);
+                idex.imm=(ifid.iru>>20) & 4095;
+                idex.imm=signextend(idex.imm,11);
             }
             else{
                 idex.ins=WRONG;
@@ -78,14 +77,12 @@ void theriscv::ID(){
             func=ToUInt(ifid.IR,17,19);
             idex.rs1=ToUInt(ifid.IR,12,16);
             idex.rs2=ToUInt(ifid.IR,7,11);
-            immtmp[0]=ifid.IR[0];
-            immtmp[1]=ifid.IR[24];
-            for(int i=1;i<=6;i++)
-                immtmp[i+1]=ifid.IR[i];
-            for(int i=20;i<=23;i++)
-                immtmp[i-12]=ifid.IR[i];
-            immtmp[12]='0';
-            idex.imm=ToUInt(immtmp,0,12);
+            immtmp1=((ifid.iru>> 7) & 1) << 11;
+            immtmp2=((ifid.iru>> 8) & 15) << 1;
+            immtmp3=((ifid.iru>> 25) & 63) << 5;
+            immtmp4=((ifid.iru>> 31) & 1) << 12;
+            idex.imm=immtmp1+immtmp2+immtmp3+immtmp4;
+            idex.imm=signextend(idex.imm,12);
 
             switch(func){
                 case 0://"000"
@@ -122,7 +119,9 @@ void theriscv::ID(){
             func=ToUInt(ifid.IR,17,19);
             idex.rs1=ToUInt(ifid.IR,12,16);
             idex.rd=ToUInt(ifid.IR,20,24);
-            idex.imm=ToInt(ifid.IR,0,11);
+            idex.imm=(ifid.iru>>20) & 4095;
+            idex.imm=signextend(idex.imm,11);
+            
             switch(func){
                 case 0://"000"
                     idex.ins=LB;
@@ -149,11 +148,11 @@ void theriscv::ID(){
             func=ToUInt(ifid.IR,17,19);
             idex.rs1=ToUInt(ifid.IR,12,16);
             idex.rs2=ToUInt(ifid.IR,7,11);
-            for(int i=0;i<=6;i++)
-                immtmp[i]=ifid.IR[i];
-            for(int i=20;i<=24;i++)
-                immtmp[i-13]=ifid.IR[i];
-            idex.imm=ToInt(ifid.IR,0,11);
+            immtmp1=(ifid.iru>>7) & 31;
+            immtmp2=((ifid.iru>>25) & 127) << 5;
+            idex.imm=immtmp1+immtmp2;
+            idex.imm=signextend(idex.imm,11);
+
             switch(func){
                 case 0://"000"
                     idex.ins=SB;
@@ -178,7 +177,8 @@ void theriscv::ID(){
             switch(func){
                 case 0://"000"
                     idex.ins=ADDI;
-                    idex.imm=ToInt(ifid.IR,0,11);
+                    idex.imm=(ifid.iru>>20) & 4095;
+                    idex.imm=signextend(idex.imm,11);
                     //设置的结束指令
                     if((idex.imm==255) && (idex.rs1==0) && (idex.rd==10)){
                         idex.END=true;
@@ -187,32 +187,37 @@ void theriscv::ID(){
                     break;
                 case 2://"010"
                     idex.ins=SLTI;
-                    idex.imm=ToInt(ifid.IR,0,11);
+                    idex.imm=(ifid.iru>>20) & 4095;
+                    idex.imm=signextend(idex.imm,11);
                     break;
                 case 3://"011"
                     if(idex.rs1>=0 && idex.imm>=0){
                         idex.ins=SLTIU;
-                        idex.immu=ToUInt(ifid.IR,0,11);
+                        idex.imm=(ifid.iru>>20) & 4095;
+                        idex.imm=signextend(idex.imm,11);
                     }
                     else
                         idex.ins=WRONG;
                     break;
                 case 4://"100"
                     idex.ins=XORI;
-                    idex.imm=ToInt(ifid.IR,0,11);
+                    idex.imm=(ifid.iru>>20) & 4095;
+                    idex.imm=signextend(idex.imm,11);
                     break;
                 case 6://"110"
                     idex.ins=ORI;
-                    idex.imm=ToInt(ifid.IR,0,11);
+                    idex.imm=(ifid.iru>>20) & 4095;
+                    idex.imm=signextend(idex.imm,11);
                     break;
                 case 7://"111"
                     idex.ins=ANDI;
-                    idex.imm=ToInt(ifid.IR,0,11);
+                    idex.imm=(ifid.iru>>20) & 4095;
+                    idex.imm=signextend(idex.imm,11);
                     break;
                 case 1://"001"
                     if(head==0){
                         idex.ins=SLLI;
-                        idex.immu=ToUInt(ifid.IR,7,11);
+                        idex.immu=(ifid.iru>>20) & 31;
                     }
                     else
                         idex.ins=WRONG;
@@ -220,11 +225,11 @@ void theriscv::ID(){
                 case 5://"101"
                     if(head==0){
                         idex.ins=SRLI;
-                        idex.immu=ToUInt(ifid.IR,7,11);
+                        idex.immu=(ifid.iru>>20) & 31;
                     }
                     else if(head==32){
                         idex.ins=SRAI;
-                        idex.immu=ToUInt(ifid.IR,7,11);
+                        idex.immu=(ifid.iru>>20) & 31;
                     }
                     else
                         idex.ins=WRONG;
@@ -241,6 +246,7 @@ void theriscv::ID(){
             idex.rs1=ToUInt(ifid.IR,12,16);
             idex.rs2=ToUInt(ifid.IR,7,11);
             idex.rd=ToUInt(ifid.IR,20,24);
+            
             switch(func){
                 case 0://"000"
                     if(head==0)
