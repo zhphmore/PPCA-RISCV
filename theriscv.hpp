@@ -241,7 +241,7 @@ void theriscv::Precision(){
         if(counter.history[i]==1)
             correct++;
     }
-    rate=correct / counter.currentsize;
+    rate=（double）correct / counter.currentsize;
     cout << "Precision:" << rate << endl;
 }
 
