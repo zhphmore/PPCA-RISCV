@@ -35,6 +35,7 @@ private:
     //IFID寄存器
     struct IFID{
         char IR[32];
+        unsigned int iru;
         unsigned int npc;
         OrderType ins;
         bool END;
@@ -87,6 +88,8 @@ private:
     int ToInt(const char* str,const int a,const int b);
     //把十六进制字符串转换为十进制数字
     int HexToDec(const char* str,const int a,const int b);
+    //符号位扩展
+    int signextend(unsigned int num,int k);
     //归零流水寄存器
     void ClearIFID();
     void ClearIDEX();
@@ -135,6 +138,7 @@ theriscv::theriscv(){
 void theriscv::ClearIFID(){
     for(int i=0;i<32;i++)
         ifid.IR[i]='0';
+    ifid.iru=0;
     ifid.npc=0;
     ifid.ins=NOP;
     ifid.END=false;
@@ -275,6 +279,13 @@ int theriscv::HexToDec(const char* str,const int a,const int b){
             dec=dec<<4;
     }
     return dec;
+}
+
+//符号位扩展
+int theriscv::signextend(unsigned int num,int k){
+     if((num >> k) & 1)
+        return num=num | ((0xffffffff >> k) << k);
+    return num;
 }
 
 //输入
