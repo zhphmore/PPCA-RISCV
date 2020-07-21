@@ -16,6 +16,7 @@ void theriscv::IF(){
     for(int i=0;i<4;i++){
         int k=8*(4-i)-1;
         unsigned int tmp=static_cast<unsigned int>(mem[pc+i]);
+        ifid.iru+=(tmp << (8*i));
         do{
             ifid.IR[k--]=tmp%2+'0';
             tmp/=2;
